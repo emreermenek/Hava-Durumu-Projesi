@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,7 @@ public class Weather {
 
     
    
-    public static Map<String, Object> jsonToMap(String str) {
+    public Map<String, Object> jsonToMap(String str) {
         return new Gson().fromJson(str, new TypeToken<Map<String, Object>>() {}.getType());
     }
     
@@ -53,7 +54,7 @@ public class Weather {
         }
     }
     
-    public static void parseInfo(){
+    public void parseInfo(){
         Weather weather = new Weather();
          try {
              StringBuilder builder = new StringBuilder();
@@ -77,8 +78,6 @@ public class Weather {
             
 
             
-
-            
             //double avgTempC = day.get("avgtemp_c").getAsDouble();
             //System.out.println("Ortalama Sıcaklık (°C): " + avgTempC);
             
@@ -95,6 +94,7 @@ public class Weather {
     public void processData(JsonObject root){
         
         JsonArray forecastdayArray = root.getAsJsonObject("forecast").getAsJsonArray("forecastday");
+        ArrayList<String> dates = database.getDateData();
         for(JsonElement day : forecastdayArray){
             String date = day.getAsJsonObject().get("date").getAsString();
             JsonObject weatherInfo = day.getAsJsonObject().get("day").getAsJsonObject(); //bunu almayacagiz.
@@ -121,13 +121,13 @@ public class Weather {
             double currHumidity = root.get("current").getAsJsonObject().get("humidity").getAsDouble();
             double currFeeledTemp = root.get("current").getAsJsonObject().get("feelslike_c").getAsDouble();
             double currUV = root.get("current").getAsJsonObject().get("uv").getAsDouble();
-            database.addInformation(new WeatherData(date, maxTemp, minTemp, avgTemp, avgHumidity, maxWindSpeed, avgvis, willItRain, willItSnow, sunrise, sunset, lastUpdatedDate, currTemp, currState, currWind, currHumidity, currFeeledTemp, currUV));
+            if(dates.contains(date)){
+                database.updateData(new WeatherData(date, maxTemp, minTemp, avgTemp, avgHumidity, maxWindSpeed, avgvis, willItRain, willItSnow, sunrise, sunset, lastUpdatedDate, currTemp, currState, currWind, currHumidity, currFeeledTemp, currUV));
+            }else{
+                database.addInformation(new WeatherData(date, maxTemp, minTemp, avgTemp, avgHumidity, maxWindSpeed, avgvis, willItRain, willItSnow, sunrise, sunset, lastUpdatedDate, currTemp, currState, currWind, currHumidity, currFeeledTemp, currUV));
+            }
         }
     }
-    
-    public static void main(String[] args){
-        parseInfo();
-    }
-
+   
     
 }

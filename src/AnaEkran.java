@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -13,14 +14,61 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AnaEkran extends javax.swing.JFrame {
     Database database = new Database();
+    Weather weather = new Weather();
   
 
     /**
      * Creates new form AnaEkran
      */
+     public ArrayList<String[]> analyzeDate(ArrayList<String> date){
+        //type = 0 -> year, type = 1 -> month, type = 2 -> day, 
+        ArrayList<String[]> dates = new ArrayList<>();
+        for(String d : date){
+            dates.add(d.split("-"));
+        }
+        return dates;
+    }
+       
+    public void updateCB(String type){
+        ArrayList<String> date = new ArrayList<>();
+        date = database.getDateData();
+        ArrayList<String[]> dates = analyzeDate(date);
+        if(type.equals("day")){
+            gunCB.removeAllItems();
+            HashSet<String> uniqueItems = new HashSet<>();
+            for(String[] d : dates){
+                String valueToAdd = d[2]; 
+                if (!uniqueItems.contains(valueToAdd)) {
+                    uniqueItems.add(valueToAdd); 
+                    gunCB.addItem(valueToAdd);  
+                }
+        }   
+        }else if(type.equals("month")){
+            ayCB.removeAllItems();
+            HashSet<String> uniqueItems = new HashSet<>();
+            for(String[] d : dates){
+                String valueToAdd = d[1]; 
+                if (!uniqueItems.contains(valueToAdd)) {
+                    uniqueItems.add(valueToAdd); 
+                    ayCB.addItem(valueToAdd);  
+                }
+        }}else if(type.equals("year")){
+            yilCB.removeAllItems();
+            HashSet<String> uniqueItems = new HashSet<>();
+            for(String[] d : dates){
+                String valueToAdd = d[0]; 
+                if (!uniqueItems.contains(valueToAdd)) {
+                    uniqueItems.add(valueToAdd); 
+                    yilCB.addItem(valueToAdd);  
+                }
+        }}else{System.out.println("type'a gecerli bir veri girmen lazım");}
+    }
+  
     public AnaEkran() {
         initComponents();
-        
+        updateCB("day");
+        updateCB("month");
+        updateCB("year");
     }
 
     /**
@@ -40,10 +88,11 @@ public class AnaEkran extends javax.swing.JFrame {
         yilCB = new javax.swing.JComboBox<>();
         aramaButonu = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tablo = new javax.swing.JTable();
         mesajAlani = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablo = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(500, 400, 0, 0));
@@ -78,15 +127,21 @@ public class AnaEkran extends javax.swing.JFrame {
 
         jLabel5.setText("Yıl");
 
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jButton1.setText("Eldeki Tüm Verileri Göster");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         tablo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Date", "Maximum Temperature", "Minimum Temperature", "Average Temperature", "Average Humidity", "Maximum Wind Speed", "Average Visibility", "Rain Possibility", "Snow Possibility", "Sunrise", "Sunset", "Last Update Date", "Current Temperature", "Current State", "Current Wind", "Current Humidity", "Current Feeled Temperature", "Current UV Light"
+                "Date", "Max Temperature", "Min Temperature", "Avg Temperature", "Avg Humidity", "Max Wind Speed", "Avg Visibility", "Rain Possibility", "Snow Possibility", "Sunrise", "Sunset", "Last Update", "Current Temperature", "Current State", "Current Wind Speed", "Current Humidity", "Current Feeled Temperature.", "Current U.V."
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -97,52 +152,48 @@ public class AnaEkran extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablo.setToolTipText("");
         tablo.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tablo.setPreferredSize(new java.awt.Dimension(500, 0));
-        jScrollPane2.setViewportView(tablo);
+        jScrollPane1.setViewportView(tablo);
         if (tablo.getColumnModel().getColumnCount() > 0) {
             tablo.getColumnModel().getColumn(0).setResizable(false);
-            tablo.getColumnModel().getColumn(0).setPreferredWidth(150);
             tablo.getColumnModel().getColumn(1).setResizable(false);
-            tablo.getColumnModel().getColumn(1).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(1).setPreferredWidth(120);
             tablo.getColumnModel().getColumn(2).setResizable(false);
+            tablo.getColumnModel().getColumn(2).setPreferredWidth(120);
             tablo.getColumnModel().getColumn(3).setResizable(false);
-            tablo.getColumnModel().getColumn(3).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(3).setPreferredWidth(150);
             tablo.getColumnModel().getColumn(4).setResizable(false);
-            tablo.getColumnModel().getColumn(4).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(4).setPreferredWidth(100);
             tablo.getColumnModel().getColumn(5).setResizable(false);
-            tablo.getColumnModel().getColumn(5).setPreferredWidth(700);
+            tablo.getColumnModel().getColumn(5).setPreferredWidth(120);
             tablo.getColumnModel().getColumn(6).setResizable(false);
-            tablo.getColumnModel().getColumn(6).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(6).setPreferredWidth(100);
             tablo.getColumnModel().getColumn(7).setResizable(false);
-            tablo.getColumnModel().getColumn(7).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(7).setPreferredWidth(100);
             tablo.getColumnModel().getColumn(8).setResizable(false);
-            tablo.getColumnModel().getColumn(8).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(8).setPreferredWidth(100);
             tablo.getColumnModel().getColumn(9).setResizable(false);
-            tablo.getColumnModel().getColumn(9).setPreferredWidth(400);
             tablo.getColumnModel().getColumn(10).setResizable(false);
-            tablo.getColumnModel().getColumn(10).setPreferredWidth(400);
             tablo.getColumnModel().getColumn(11).setResizable(false);
-            tablo.getColumnModel().getColumn(11).setPreferredWidth(500);
+            tablo.getColumnModel().getColumn(11).setPreferredWidth(150);
             tablo.getColumnModel().getColumn(12).setResizable(false);
-            tablo.getColumnModel().getColumn(12).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(12).setPreferredWidth(150);
             tablo.getColumnModel().getColumn(13).setResizable(false);
-            tablo.getColumnModel().getColumn(13).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(13).setPreferredWidth(110);
             tablo.getColumnModel().getColumn(14).setResizable(false);
-            tablo.getColumnModel().getColumn(14).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(14).setPreferredWidth(120);
             tablo.getColumnModel().getColumn(15).setResizable(false);
-            tablo.getColumnModel().getColumn(15).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(15).setPreferredWidth(110);
             tablo.getColumnModel().getColumn(16).setResizable(false);
-            tablo.getColumnModel().getColumn(16).setPreferredWidth(600);
+            tablo.getColumnModel().getColumn(16).setPreferredWidth(170);
             tablo.getColumnModel().getColumn(17).setResizable(false);
-            tablo.getColumnModel().getColumn(17).setPreferredWidth(500);
+            tablo.getColumnModel().getColumn(17).setPreferredWidth(150);
         }
 
-        jButton1.setText("Eldeki Tüm Verileri Göster");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton2.setText("Güncel Hava Durumu Verisi Sorgula");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -154,8 +205,8 @@ public class AnaEkran extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -169,7 +220,11 @@ public class AnaEkran extends javax.swing.JFrame {
                                 .addComponent(aramaButonu, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(25, 25, 25)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(mesajAlani, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -203,10 +258,12 @@ public class AnaEkran extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(mesajAlani, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -219,14 +276,14 @@ public class AnaEkran extends javax.swing.JFrame {
     private void aramaButonuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aramaButonuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_aramaButonuActionPerformed
-
+    
+    
     private void gunCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gunCBActionPerformed
         // TODO add your handling code here:
+      
         
     }//GEN-LAST:event_gunCBActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    public void verileriGoster(){
         DefaultTableModel model = (DefaultTableModel) tablo.getModel();
         model.setRowCount(0);
         ArrayList<WeatherData> list = new ArrayList<>();
@@ -235,7 +292,17 @@ public class AnaEkran extends javax.swing.JFrame {
             Object[] eklenecek = {data.getDate(), data.getMaxTemp(), data.getMinTemp(), data.getAvgTemp(), data.getAvgHumidity(), data.getMaxWindSpeed(), data.getAvgVis(), data.getWillItRain(), data.getWillItSnow(), data.getSunrise(), data.getSunset(), data.getLastUpdate(), data.getCurrTemp(), data.getCurrState(), data.getCurrWind(), data.getCurrHumidity(), data.getCurrFeeledTemp(), data.getCurrUV()};
             model.addRow(eklenecek);
         }
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+       verileriGoster();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        weather.parseInfo();
+        verileriGoster();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,11 +344,12 @@ public class AnaEkran extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ayCB;
     private javax.swing.JComboBox<String> gunCB;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel mesajAlani;
     private javax.swing.JTable tablo;
     private javax.swing.JComboBox<String> yilCB;

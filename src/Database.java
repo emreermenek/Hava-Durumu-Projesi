@@ -121,4 +121,53 @@ public class Database {
         return null;
     }
     
+    public ArrayList<String> getDateData(){
+      
+        try {
+            String sorgu = "Select date From days";
+            ArrayList<String> dates = new ArrayList<>();
+            statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(sorgu);
+            while(rs.next()){
+                String date = rs.getString("date");
+                dates.add(date);
+            }
+            
+            return dates;
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public void updateData(WeatherData data){
+        
+        try {
+            String sorgu = "Update day_data set maxTemp = ?, minTemp = ?, avgTemp = ?, avgHumidity = ?, maxWindSpeed = ?, avgVis = ?, willItRain = ?, willItSnow = ?, sunrise = ? sunset = ?, lastUpdated = ?, currTemp = ?, currState = ?, currWind = ?, currHumidity = ?, currFeeledTemp = ?, currUV = ? where date = ?";
+            preparedStatement = conn.prepareStatement(sorgu);             
+            preparedStatement.setDouble(1, data.getMaxTemp());
+            preparedStatement.setDouble(2, data.getMinTemp());
+            preparedStatement.setDouble(3,data.getAvgTemp());
+            preparedStatement.setDouble(4, data.getAvgHumidity());
+            preparedStatement.setDouble(5, data.getMaxWindSpeed());
+            preparedStatement.setDouble(6, data.getAvgVis());
+            preparedStatement.setDouble(7, data.getWillItRain());
+            preparedStatement.setDouble(8, data.getWillItSnow());
+            preparedStatement.setString(9, data.getSunrise());
+            preparedStatement.setString(10, data.getSunset());
+            preparedStatement.setString(11, data.getLastUpdate());
+            preparedStatement.setDouble(12, data.getCurrTemp());
+            preparedStatement.setString(13, data.getCurrState());
+            preparedStatement.setDouble(14, data.getCurrWind());
+            preparedStatement.setDouble(15, data.getCurrHumidity());
+            preparedStatement.setDouble(16, data.getCurrFeeledTemp());
+            preparedStatement.setDouble(17, data.getCurrUV());
+            preparedStatement.setString(18, data.getDate());
+            //preparedStatement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
