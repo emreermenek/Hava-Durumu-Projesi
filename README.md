@@ -57,22 +57,22 @@ Bu proje, **Java Swing** kullanılarak geliştirilmiş ve NetBeans IDE üzerinde
 
 ## **Ekran Görüntüleri**
 ### **Ana Ekran**
-![Datalar](C:/Users/emree/OneDrive/Desktop/HavaDurumu/images/weather.png)
+![Datalar](images/weather.png)
 
 ### **7 Günlük Tahmin**
-![days](C:/Users/emree/OneDrive/Desktop/HavaDurumu/images/days.png)
+![days](images/days.png)
 
 ### **Veri Görüntüleme (1)**
-![day_data(1.parçası)](C:/Users/emree/OneDrive/Desktop/HavaDurumu/images/days_data1.png)
+![day_data(1.parçası)](images/days_data1.png)
 
 ### **Veri Görüntüleme (2)**
-![day_data(2.parçası)](C:/Users/emree/OneDrive/Desktop/HavaDurumu/images/days_data2.png)
+![day_data(2.parçası)](images/days_data2.png)
 
 ### **Ekran Verisi(datalar yokken)**
-![day_data(1.parçası)](C:/Users/emree/OneDrive/Desktop/HavaDurumu/images/days_data1.png)
+![day_data(1.parçası)](images/days_data1.png)
 
 ### **Ekran Verisi(datalar varken)**
-![day_data(2.parçası)](C:/Users/emree/OneDrive/Desktop/HavaDurumu/images/days_data2.png)
+![day_data(2.parçası)](images/days_data2.png)
 
 ---
 
