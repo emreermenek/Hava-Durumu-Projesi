@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
@@ -96,6 +97,7 @@ public class AnaEkran extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablo = new javax.swing.JTable();
         guncelButon = new javax.swing.JButton();
+        silButon = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(500, 400, 0, 0));
@@ -202,6 +204,13 @@ public class AnaEkran extends javax.swing.JFrame {
             }
         });
 
+        silButon.setText("Sil");
+        silButon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                silButonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -215,6 +224,18 @@ public class AnaEkran extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(mesajAlani, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(302, 302, 302)
                                 .addComponent(gunCB, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -225,24 +246,12 @@ public class AnaEkran extends javax.swing.JFrame {
                                 .addComponent(aramaButonu, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(25, 25, 25)
-                                        .addComponent(guncelButon, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(mesajAlani, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tumVerilerButon, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(28, 28, 28)
-                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(25, 25, 25)
+                                .addComponent(guncelButon, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(tumVerilerButon, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(silButon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18))))
         );
         layout.setVerticalGroup(
@@ -265,7 +274,8 @@ public class AnaEkran extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tumVerilerButon)
-                    .addComponent(guncelButon))
+                    .addComponent(guncelButon)
+                    .addComponent(silButon))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -287,12 +297,15 @@ public class AnaEkran extends javax.swing.JFrame {
         String date = year + "-" + month + "-" + day;
         WeatherData data = database.getDataAtSpecifiedDate(date);
         if(data == null){
+            mesajAlani.setForeground(Color.red);
             mesajAlani.setText("Bu veri bulunamadi lütfen güncel veri çek butonunu deneyin!");
             return;
         }
         model.setRowCount(0);
         Object[] eklenecek = {data.getDate(), data.getMaxTemp(), data.getMinTemp(), data.getAvgTemp(), data.getAvgHumidity(), data.getMaxWindSpeed(), data.getAvgVis(), data.getWillItRain(), data.getWillItSnow(), data.getSunrise(), data.getSunset(), data.getLastUpdate(), data.getCurrTemp(), data.getCurrState(), data.getCurrWind(), data.getCurrHumidity(), data.getCurrFeeledTemp(), data.getCurrUV()};
         model.addRow(eklenecek);
+        mesajAlani.setForeground(Color.green);
+        mesajAlani.setText("Başarıyla arandı.");
     }//GEN-LAST:event_aramaButonuActionPerformed
     
     
@@ -307,6 +320,7 @@ public class AnaEkran extends javax.swing.JFrame {
         ArrayList<WeatherData> list = new ArrayList<>();
         list = database.getAllData();
         if(list == null){
+            mesajAlani.setForeground(Color.red);
             mesajAlani.setText("Database boş, lütfen güncel veri çekme butonunu deneyin!");
         }
         for(WeatherData data : list){
@@ -324,6 +338,26 @@ public class AnaEkran extends javax.swing.JFrame {
         weather.parseInfo(database);
         verileriGoster();
     }//GEN-LAST:event_guncelButonActionPerformed
+
+    private void silButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_silButonActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tablo.getSelectedRow();
+        if(selectedRow == -1){
+            mesajAlani.setForeground(Color.red);
+            if(tablo.getRowCount() == 0){
+                mesajAlani.setText("Tabloda değer yok!");
+            }else{
+                mesajAlani.setText("Lütfen bir değer seçiniz!");
+            }
+        }else{
+            String date = (String)tablo.getValueAt(selectedRow, 0);
+            database.delete(date);
+            verileriGoster();
+            mesajAlani.setForeground(Color.green);
+            mesajAlani.setText("Çalışan başarıyla silindi.");
+        }
+        
+    }//GEN-LAST:event_silButonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -371,6 +405,7 @@ public class AnaEkran extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel mesajAlani;
+    private javax.swing.JButton silButon;
     private javax.swing.JTable tablo;
     private javax.swing.JButton tumVerilerButon;
     private javax.swing.JComboBox<String> yilCB;

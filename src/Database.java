@@ -211,4 +211,22 @@ public class Database {
         return null;
     }
     
+    public void delete(String date){
+       
+        try {
+            String sorgu = "Delete From day_data where date = ?";
+            conn.setAutoCommit(false);
+            preparedStatement = conn.prepareStatement(sorgu);
+            preparedStatement.setString(1, date);
+            preparedStatement.executeUpdate();
+            sorgu = "Delete From days where date = ?";
+            preparedStatement = conn.prepareStatement(sorgu);
+            preparedStatement.setString(1, date);
+            preparedStatement.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
