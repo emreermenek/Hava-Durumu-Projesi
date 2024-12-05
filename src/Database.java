@@ -170,4 +170,45 @@ public class Database {
         }
     }
     
+    public WeatherData getDataAtSpecifiedDate(String date){
+       
+        try {
+            String sorgu = "Select * From day_data where date = ?";
+            preparedStatement = conn.prepareStatement(sorgu);
+            preparedStatement.setString(1, date);
+            ResultSet rs = preparedStatement.executeQuery();
+             if (rs.next()) {
+            String dateC = rs.getString("date");
+            double maxTemp = rs.getDouble("maxTemp");
+            double minTemp = rs.getDouble("minTemp");
+            double avgTemp = rs.getDouble("avgTemp");
+            double avgHumidity = rs.getDouble("avgHumidity");
+            double maxWindSpeed = rs.getDouble("maxWindSpeed");
+            double avgvis = rs.getDouble("avgvis");
+            double willItRain = rs.getDouble("willItRain");
+            double willItSnow = rs.getDouble("willItSnow");
+            String sunrise = rs.getString("sunrise");
+            String sunset = rs.getString("sunset");
+            String lastUpdated = rs.getString("lastUpdated");
+            double currTemp = rs.getDouble("currTemp");
+            String currState = rs.getString("currState");
+            double currWind = rs.getDouble("currWind");
+            double currHumidity = rs.getDouble("currHumidity");
+            double currFeeledTemp = rs.getDouble("currFeeledTemp");
+            double currUV = rs.getDouble("currUV");
+
+            return new WeatherData(
+                dateC, maxTemp, minTemp, avgTemp, avgHumidity, maxWindSpeed,
+                avgvis, willItRain, willItSnow, sunrise, sunset, lastUpdated,
+                currTemp, currState, currWind, currHumidity, currFeeledTemp, currUV
+            );
+        } else {
+            return null;
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
 }

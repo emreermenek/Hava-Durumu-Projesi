@@ -32,6 +32,9 @@ public class AnaEkran extends javax.swing.JFrame {
     public void updateCB(String type){
         ArrayList<String> date = new ArrayList<>();
         date = database.getDateData();
+        if(date == null){
+            return;
+        }
         ArrayList<String[]> dates = analyzeDate(date);
         if(type.equals("day")){
             gunCB.removeAllItems();
@@ -89,10 +92,10 @@ public class AnaEkran extends javax.swing.JFrame {
         aramaButonu = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         mesajAlani = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        tumVerilerButon = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablo = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        guncelButon = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(500, 400, 0, 0));
@@ -127,10 +130,12 @@ public class AnaEkran extends javax.swing.JFrame {
 
         jLabel5.setText("Yıl");
 
-        jButton1.setText("Eldeki Tüm Verileri Göster");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        mesajAlani.setForeground(new java.awt.Color(255, 0, 51));
+
+        tumVerilerButon.setText("Eldeki Tüm Verileri Göster");
+        tumVerilerButon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                tumVerilerButonActionPerformed(evt);
             }
         });
 
@@ -190,10 +195,10 @@ public class AnaEkran extends javax.swing.JFrame {
             tablo.getColumnModel().getColumn(17).setPreferredWidth(150);
         }
 
-        jButton2.setText("Güncel Hava Durumu Verisi Sorgula");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        guncelButon.setText("Güncel Hava Durumu Verisi Sorgula");
+        guncelButon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                guncelButonActionPerformed(evt);
             }
         });
 
@@ -224,13 +229,13 @@ public class AnaEkran extends javax.swing.JFrame {
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(25, 25, 25)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(guncelButon, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(mesajAlani, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tumVerilerButon, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -259,8 +264,8 @@ public class AnaEkran extends javax.swing.JFrame {
                 .addComponent(mesajAlani, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(tumVerilerButon)
+                    .addComponent(guncelButon))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -275,6 +280,19 @@ public class AnaEkran extends javax.swing.JFrame {
 
     private void aramaButonuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aramaButonuActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tablo.getModel();
+        String day = (String) gunCB.getSelectedItem();
+        String month = (String) ayCB.getSelectedItem();
+        String year = (String) yilCB.getSelectedItem();
+        String date = year + "-" + month + "-" + day;
+        WeatherData data = database.getDataAtSpecifiedDate(date);
+        if(data == null){
+            mesajAlani.setText("Bu veri bulunamadi lütfen güncel veri çek butonunu deneyin!");
+            return;
+        }
+        model.setRowCount(0);
+        Object[] eklenecek = {data.getDate(), data.getMaxTemp(), data.getMinTemp(), data.getAvgTemp(), data.getAvgHumidity(), data.getMaxWindSpeed(), data.getAvgVis(), data.getWillItRain(), data.getWillItSnow(), data.getSunrise(), data.getSunset(), data.getLastUpdate(), data.getCurrTemp(), data.getCurrState(), data.getCurrWind(), data.getCurrHumidity(), data.getCurrFeeledTemp(), data.getCurrUV()};
+        model.addRow(eklenecek);
     }//GEN-LAST:event_aramaButonuActionPerformed
     
     
@@ -288,21 +306,24 @@ public class AnaEkran extends javax.swing.JFrame {
         model.setRowCount(0);
         ArrayList<WeatherData> list = new ArrayList<>();
         list = database.getAllData();
+        if(list == null){
+            mesajAlani.setText("Database boş, lütfen güncel veri çekme butonunu deneyin!");
+        }
         for(WeatherData data : list){
             Object[] eklenecek = {data.getDate(), data.getMaxTemp(), data.getMinTemp(), data.getAvgTemp(), data.getAvgHumidity(), data.getMaxWindSpeed(), data.getAvgVis(), data.getWillItRain(), data.getWillItSnow(), data.getSunrise(), data.getSunset(), data.getLastUpdate(), data.getCurrTemp(), data.getCurrState(), data.getCurrWind(), data.getCurrHumidity(), data.getCurrFeeledTemp(), data.getCurrUV()};
             model.addRow(eklenecek);
         }
     }
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void tumVerilerButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tumVerilerButonActionPerformed
         // TODO add your handling code here:
        verileriGoster();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_tumVerilerButonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void guncelButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guncelButonActionPerformed
         // TODO add your handling code here:
-        weather.parseInfo();
+        weather.parseInfo(database);
         verileriGoster();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_guncelButonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,8 +364,7 @@ public class AnaEkran extends javax.swing.JFrame {
     private javax.swing.JButton aramaButonu;
     private javax.swing.JComboBox<String> ayCB;
     private javax.swing.JComboBox<String> gunCB;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton guncelButon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -352,6 +372,7 @@ public class AnaEkran extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel mesajAlani;
     private javax.swing.JTable tablo;
+    private javax.swing.JButton tumVerilerButon;
     private javax.swing.JComboBox<String> yilCB;
     // End of variables declaration//GEN-END:variables
 }

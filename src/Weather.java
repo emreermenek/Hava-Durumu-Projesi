@@ -34,7 +34,7 @@ public class Weather {
     private static final double lat = 38.4224548; 
     private static final double lon = 27.1310699;
     private static final String urlAdress = "http://api.weatherapi.com/v1/forecast.json?key="+API_KEY+"&q=38.4224548,27.1310699&days=7";
-    Database database = new Database();
+   
     
 
     
@@ -54,7 +54,7 @@ public class Weather {
         }
     }
     
-    public void parseInfo(){
+    public void parseInfo(Database database){
         Weather weather = new Weather();
          try {
              StringBuilder builder = new StringBuilder();
@@ -72,7 +72,7 @@ public class Weather {
             //double temp = jsonObject.get("forecast").getAsJsonObject().get("forecastday").getAsJsonObject().get("0").getAsJsonObject().get("day").getAsJsonObject().get("avgtemp_c");
             
             JsonObject root = JsonParser.parseString(builder.toString()).getAsJsonObject();
-            weather.processData(root);
+            weather.processData(root, database);
 
             //forecast > forecastday > [0] > day > avgtemp_c
             
@@ -91,7 +91,7 @@ public class Weather {
         
     }
     
-    public void processData(JsonObject root){
+    public void processData(JsonObject root, Database database){
         
         JsonArray forecastdayArray = root.getAsJsonObject("forecast").getAsJsonArray("forecastday");
         ArrayList<String> dates = database.getDateData();
