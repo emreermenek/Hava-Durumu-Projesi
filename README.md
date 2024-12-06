@@ -69,10 +69,10 @@ Bu proje, **Java Swing** kullanılarak geliştirilmiş ve NetBeans IDE üzerinde
 ![day_data(2.parçası)](images/days_data2.png)
 
 ### **Ekran Verisi(datalar yokken)**
-![day_data(1.parçası)](images/days_data1.png)
+![day_data(1.parçası)](images/ekran_1.png)
 
 ### **Ekran Verisi(datalar varken)**
-![day_data(2.parçası)](images/days_data2.png)
+![day_data(2.parçası)](images/ekran_2.png)
 
 ---
 
